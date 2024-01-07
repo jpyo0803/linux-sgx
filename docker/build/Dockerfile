@@ -28,7 +28,7 @@
 #
 
 
-FROM ubuntu:18.04 as builder
+FROM sgx_torch/base as builder
 
 RUN apt-get update && apt-get install  -y \
     autoconf \
@@ -67,7 +67,7 @@ RUN make psw_install_pkg
 ENV BUILD_PLATFORM="docker"
 RUN make deb_local_repo
 
-FROM ubuntu:18.04 as aesm
+FROM sgx_torch/base as aesm
 RUN apt-get update && apt-get install -y \
     libcurl4 \
     libprotobuf10 \
@@ -82,7 +82,7 @@ WORKDIR /opt/intel/sgxpsw/aesm/
 ENV LD_LIBRARY_PATH=.
 CMD ./aesm_service --no-daemon
 
-FROM ubuntu:18.04 as aesm_deb
+FROM sgx_torch/base as aesm_deb
 RUN apt-get update && apt-get install -y \
     libcurl4 \
     libprotobuf10 \
@@ -102,7 +102,7 @@ ENV LD_LIBRARY_PATH=.
 CMD ./aesm_service --no-daemon
 
 
-FROM ubuntu:18.04 as sample
+FROM sgx_torch/base as sample
 RUN apt-get update && apt-get install -y \
     g++ \
     libcurl4-openssl-dev \
@@ -119,13 +119,13 @@ RUN sh -c 'echo yes | ./sgx_linux_x64_sdk_*.bin'
 WORKDIR /opt/intel/sgxsdk/SampleCode/SampleEnclave
 RUN SGX_DEBUG=0 SGX_MODE=HW SGX_PRERELEASE=1 make
 
-RUN adduser -q --disabled-password --gecos "" --no-create-home sgxuser
-USER sgxuser
+# RUN adduser -q --disabled-password --gecos "" --no-create-home sgxuser
+# USER sgxuser
 
 CMD ./app
 
 
-FROM ubuntu:18.04 as sample_deb
+FROM sgx_torch/base as sample_deb
 RUN apt-get update && apt-get install -y \
     g++ \
     libcurl4-openssl-dev \
@@ -148,7 +148,7 @@ RUN sh -c 'echo yes | ./sgx_linux_x64_sdk_*.bin'
 WORKDIR /opt/intel/sgxsdk/SampleCode/SampleEnclave
 RUN SGX_DEBUG=0 SGX_MODE=HW SGX_PRERELEASE=1 make
 
-RUN adduser -q --disabled-password --gecos "" --no-create-home sgxuser
-USER sgxuser
+# RUN adduser -q --disabled-password --gecos "" --no-create-home sgxuser
+# USER sgxuser
 
 CMD ./app

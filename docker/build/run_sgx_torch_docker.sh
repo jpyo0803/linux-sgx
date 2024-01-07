@@ -30,9 +30,7 @@
 #
 
 set -e
-docker build --target sample --build-arg https_proxy=$https_proxy \
-             --build-arg http_proxy=$http_proxy -t sgx_sample -f ./Dockerfile ../../
 
 # Another container should expose AESM and its socket in aesmd-socket volume.
 # Replace /dev/sgx_enclave with /dev/isgx if you use the Legacy Launch Control driver
-docker run --env http_proxy --env https_proxy --device=/dev/isgx --gpus all -v aesmd-socket:/var/run/aesmd -it sgx_sample /bin/bash
+docker run --env http_proxy --env https_proxy --device=/dev/isgx --gpus all -v aesmd-socket:/var/run/aesmd -v /home/jpyo0803/workspace/sgx-forked/docker/build/svol:/svol -it sgx_torch/base /bin/zsh
