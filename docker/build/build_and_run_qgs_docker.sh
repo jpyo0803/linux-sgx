@@ -38,4 +38,4 @@ docker volume create --driver local --opt type=tmpfs --opt device=tmpfs --opt o=
 # If you use the Legacy Launch Control driver, replace /dev/sgx_enclave with /dev/isgx, and remove
 # --device=/dev/sgx_provision
 
-docker run --device=/dev/sgx_enclave --device=/dev/sgx_provision -v /dev/log:/dev/log -v qgs-socket:/var/run/tdx-qgs/ -it --add-host=host.docker.internal:host-gateway tdx_qgs /opt/intel/tdx-qgs/qgs --no-daemon
+docker run --device=/dev/isgx -v /dev/log:/dev/log -v qgs-socket:/var/run/tdx-qgs/ -it --add-host=host.docker.internal:host-gateway tdx_qgs /opt/intel/tdx-qgs/qgs --no-daemon
